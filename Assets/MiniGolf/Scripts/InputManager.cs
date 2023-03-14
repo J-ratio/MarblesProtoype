@@ -60,21 +60,21 @@ public class InputManager : MonoBehaviour
                     worldPoint = hit.point;
                 }
 
-                cross.transform.position = new Vector3(worldPoint.x,0.5f,worldPoint.z);
-                BallControl.instance.createParabolicPath(cross.transform.position);
+                //cross.transform.position = new Vector3(worldPoint.x,0.5f,worldPoint.z);
+                //BallControl.instance.createParabolicPath(cross.transform.position);
 
                 //if distance is less than the limit allowed
-                /*if (distanceBetweenBallAndMouseClick <= distanceBetweenBallAndMouseClickLimit)
+                if (distanceBetweenBallAndMouseClick <= distanceBetweenBallAndMouseClickLimit)
                 {
                     BallControl.instance.MouseNormalMethod();   //call ball method
                 }
                 else
                 {                                               //else call camera method
-                    CameraRotation.instance.RotateCamera(Input.GetAxis("Mouse X"));
-                }*/
+                    //CameraRotation.instance.RotateCamera(Input.GetAxis("Mouse X"));
+                }
             }
 
-            /*if (Input.GetMouseButtonUp(0))                      //on mouse click is left
+            if (Input.GetMouseButtonUp(0))                      //on mouse click is left
             {
                 canRotate = false;                              //canRotate is set false
                                                                 //if distance is less than the limit allowed
@@ -82,7 +82,7 @@ public class InputManager : MonoBehaviour
                 {
                     BallControl.instance.MouseUpMethod();       //call ball method
                 }
-            }*/
+            }
         }
     }
 
