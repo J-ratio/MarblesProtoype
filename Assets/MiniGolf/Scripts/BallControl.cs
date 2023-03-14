@@ -8,6 +8,7 @@ public class BallControl : MonoBehaviour
 {
     public static BallControl instance;                 
 
+    [SerializeField] private Camera Cam;
     [SerializeField] private LineRenderer lineRenderer;     //reference to lineRenderer child object
     [SerializeField] private LineRenderer lineRenderer2; 
     [SerializeField] private float MaxForce;                //maximum force that an be applied to ball
@@ -23,6 +24,9 @@ public class BallControl : MonoBehaviour
     private Vector3 startPos, endPos;
     private bool canShoot = false, ballIsStatic = true;    //bool to make shooting stopping ball easy
     private Vector3 direction;                              //direction in which the ball will be shot
+
+
+
 
     private void Awake()
     {
@@ -133,7 +137,7 @@ public class BallControl : MonoBehaviour
     Vector3 ClickedPoint()
     {
         Vector3 position = Vector3.zero;                                //get a new Vector3 varialbe
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);    //create a ray from camera in mouseposition direction
+        var ray = Cam.ScreenPointToRay(Input.mousePosition);    //create a ray from camera in mouseposition direction
         RaycastHit hit = new RaycastHit();                              //create a RaycastHit
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, rayLayer))    //check for the hit 
         {
