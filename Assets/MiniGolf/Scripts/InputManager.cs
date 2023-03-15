@@ -9,7 +9,7 @@ public class InputManager : MonoBehaviour
     private float distanceBetweenBallAndMouseClickLimit = 0.5f; //variable to decide who will take input Ball or Camera
 
     private float distanceBetweenBallAndMouseClick;             //variable to track the distance
-    private bool canRotate = false;                             //bool
+    private bool canRotate = true;                             //bool
 
 
     [SerializeField]
@@ -21,36 +21,57 @@ public class InputManager : MonoBehaviour
         if (GameManager.singleton.gameStatus != GameStatus.Playing) return; //if gameStatus is not playing, return
 
 
-        if (Input.GetMouseButtonDown(0) && !canRotate)          //if mouse button is clicked and canRotate is false
+        if (!canRotate)          //if mouse button is clicked and canRotate is false
         {
 
             //GetDistance();                                      //get the distance between mouseClick point and ball
-            canRotate = true;                                   //set canRotate to true
+            //canRotate = true;                                   //set canRotate to true
 
             //if distance is less than the limit allowed
             /*if (distanceBetweenBallAndMouseClick <= distanceBetweenBallAndMouseClickLimit)
             {
                 BallControl.instance.MouseDownMethod();         //we control the ball
             }*/
+
+
+            BallControl.instance.MouseDownMethod();         //we control the ball
+
+
+            
+
+            if(Input.GetMouseButton(0))
+            {
+                BallControl.instance.MouseNormalMethod(); 
+            }
+            
+
+            if(Input.GetMouseButtonUp(0))
+            {
+                BallControl.instance.MouseUpMethod();
+                Debug.Log("11");
+            }
+
         }
 
         if (canRotate)                                          //if canRotate is true
         {
-            if(Input.mousePosition.x < 0.1*Screen.width)
-            {
-                CameraRotation.instance.StartRotatingCamera(true);
-            }
-            else if(Input.mousePosition.x > 0.9*Screen.width)
-            {
-                CameraRotation.instance.StartRotatingCamera(false);
-            }
-            else
-            {
-                CameraRotation.instance.StopRotating();
-            }
+            
             
             if (Input.GetMouseButton(0))                        //if mousebutton is clicked
             {
+
+                if(Input.mousePosition.x < 0.1*Screen.width)
+                {
+                    CameraRotation.instance.StartRotatingCamera(true);
+                }
+                else if(Input.mousePosition.x > 0.9*Screen.width)
+                {
+                    CameraRotation.instance.StartRotatingCamera(false);
+                }
+                else
+                {
+                    CameraRotation.instance.StopRotating();
+                }
 
                 Vector3 worldPoint = Vector3.zero;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -60,28 +81,18 @@ public class InputManager : MonoBehaviour
                     worldPoint = hit.point;
                 }
 
-                //cross.transform.position = new Vector3(worldPoint.x,0.5f,worldPoint.z);
-                //BallControl.instance.createParabolicPath(cross.transform.position);
+                cross.transform.position = new Vector3(worldPoint.x,0.5f,worldPoint.z);
+                BallControl.instance.createParabolicPath(cross.transform.position);
 
                 //if distance is less than the limit allowed
-                if (distanceBetweenBallAndMouseClick <= distanceBetweenBallAndMouseClickLimit)
+                /*if (distanceBetweenBallAndMouseClick <= distanceBetweenBallAndMouseClickLimit)
                 {
                     BallControl.instance.MouseNormalMethod();   //call ball method
                 }
                 else
                 {                                               //else call camera method
                     //CameraRotation.instance.RotateCamera(Input.GetAxis("Mouse X"));
-                }
-            }
-
-            if (Input.GetMouseButtonUp(0))                      //on mouse click is left
-            {
-                canRotate = false;                              //canRotate is set false
-                                                                //if distance is less than the limit allowed
-                if (distanceBetweenBallAndMouseClick <= distanceBetweenBallAndMouseClickLimit)
-                {
-                    BallControl.instance.MouseUpMethod();       //call ball method
-                }
+                }*/
             }
         }
     }
@@ -101,6 +112,15 @@ public class InputManager : MonoBehaviour
             //calculate the distance
             distanceBetweenBallAndMouseClick = Vector3.Distance(v3Pos, BallControl.instance.transform.position);
         }
+    }
+
+
+    public void Play()
+    {
+        cross.SetActive(false);
+        canRotate = false;
+        BallControl.instance.EndPos = cross.transform.position;
+        BallControl.instance.showHiddenObjects();
     }
 
 }
