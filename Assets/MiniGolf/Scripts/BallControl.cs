@@ -10,13 +10,14 @@ public class BallControl : MonoBehaviour
 
     [SerializeField] private Camera Cam;
     [SerializeField] private LineRenderer lineRenderer;     //reference to lineRenderer child object
-    [SerializeField] private LineRenderer lineRenderer2; 
+    [SerializeField] private LineRenderer lineRenderer2;
     [SerializeField] private float MaxForce;                //maximum force that an be applied to ball
     [SerializeField] private float forceModifier = 0.5f;    //multipliers of force
     [SerializeField] private GameObject areaAffector;       //reference to sprite object which show area around ball to click
     [SerializeField] private LayerMask rayLayer;            //layer allowed to be detected by ray
     [SerializeField] private int y_force;
     private float force;                                    //actuale force which is applied to the ball
+    public Vector3 EndPos;
     private Rigidbody rgBody;                               //reference to rigidbody attached to this gameobject
     /// <summary>
     /// The below variables are used to decide the force to be applied to the ball
@@ -86,10 +87,9 @@ public class BallControl : MonoBehaviour
     public void MouseDownMethod()                                           //method called on mouse down by InputManager
     {
         if(!ballIsStatic) return;                                           //no mouse detection if ball is moving
-        startPos = ClickedPoint();                                          //get the vector in word space
+        startPos = transform.position;                                          //get the vector in word space
         lineRenderer.gameObject.SetActive(true);                            //activate lineRenderer
         lineRenderer.SetPosition(0, lineRenderer.transform.localPosition);  //set its 1st position
-        //lineRenderer2.gameObject.SetActive(true);
         
     }
 
@@ -98,10 +98,10 @@ public class BallControl : MonoBehaviour
         if(!ballIsStatic) return;                                           //no mouse detection if ball is moving
         endPos = ClickedPoint();                                                //get the vector in word space
         force = Mathf.Clamp(Vector3.Distance(endPos, startPos) * forceModifier, 0 , MaxForce);   //calculate the force
+        Debug.Log(force);
         UIManager.instance.PowerBar.fillAmount = force / MaxForce;              //set the powerBar image fill amount
         //we convert the endPos to local pos for ball as lineRenderer is child of ball
         lineRenderer.SetPosition(1, transform.InverseTransformPoint(endPos));   //set its 1st position
-        //lineRenderer2.drawline(force);
     }
 
     public void MouseUpMethod()                                             //method called by InputManager
@@ -109,7 +109,6 @@ public class BallControl : MonoBehaviour
         if(!ballIsStatic) return;                                           //no mouse detection if ball is moving
         canShoot = true;                                                    //set canShoot true
         lineRenderer.gameObject.SetActive(false);                           //deactive lineRenderer
-        //lineRenderer2.gameObject.SetActive(false);                           //deactive lineRenderer        
     }
 
 
@@ -128,6 +127,18 @@ public class BallControl : MonoBehaviour
 
             lineRenderer2.SetPosition(i, point);
         }
+    }
+
+
+    public void showHiddenObjects()
+    {
+
+        lineRenderer2.gameObject.SetActive(false);
+        Cam.gameObject.SetActive(true);
+        transform.Find("bar").gameObject.SetActive(true);
+        transform.Find("cross").gameObject.SetActive(true);
+        transform.Find("arrow").gameObject.SetActive(true);
+
     }
 
 
