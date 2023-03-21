@@ -26,7 +26,6 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// Method to spawn level
     /// </summary>
@@ -67,7 +66,7 @@ public class LevelManager : MonoBehaviour
         if (GameManager.singleton.gameStatus == GameStatus.Playing) //check if the gamestatus is playing
         {
             GameManager.singleton.gameStatus = GameStatus.Failed;   //set gamestatus to failed
-            SpawnLevel(GameManager.singleton.currentLevelIndex);
+            UIManager.instance.GameResult();                        //call GameResult method
         }
     }
 
@@ -88,7 +87,7 @@ public class LevelManager : MonoBehaviour
                 GameManager.singleton.currentLevelIndex = 0;
             }
             GameManager.singleton.gameStatus = GameStatus.Complete; //set gamestatus to Complete
-            SpawnLevel(GameManager.singleton.currentLevelIndex+1);
+            UIManager.instance.GameResult();                        //call GameResult method
         }
     }
 }
